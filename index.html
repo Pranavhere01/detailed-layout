@@ -353,6 +353,20 @@ html.rc-open .guide{display:none}
 #rcPass{flex:1;min-width:0;min-height:48px;border:2.5px solid var(--pink);border-radius:14px;padding:8px 12px;font:600 18px/1.3 var(--body);color:var(--plum);background:#fff;letter-spacing:.08em}
 .rc-msg{min-height:22px;margin:0;font:600 14px/1.5 var(--body);color:var(--rose)}
 .rc-back{min-height:44px;padding:0 12px;border:0;background:none;font:600 15px/1.2 var(--body);color:var(--muted);text-decoration:underline;text-underline-offset:3px;border-radius:12px}
+/* The card Pranav sent (26 Sep 2026): one full-screen creative, hers only, shown once ever.
+   Nothing is written on it — the six lines are the ones he sent, and no words are ours.
+   Topmost layer (z 130, above the install sheet 110 and the roll call 120). */
+html.sc-open,html.sc-open body{overflow:hidden}
+html.sc-open .guide{display:none}
+.sc{position:fixed;inset:0;z-index:130;display:grid;place-items:center;padding:calc(env(safe-area-inset-top,0px) + 14px) 14px calc(env(safe-area-inset-bottom,0px) + 14px)}
+.sc-backdrop{position:absolute;inset:0;background:rgba(61,35,70,.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:scfade .3s ease both}
+.sc-frame{position:relative;margin:0;border-radius:28px;overflow:hidden;border:3px solid var(--pink-t);background:#05070C;box-shadow:0 22px 50px rgba(40,15,50,.35);animation:scin .5s cubic-bezier(.2,1.3,.4,1) both}
+.sc-frame video,.sc-frame img{display:block;width:auto;height:auto;max-width:min(420px,86vw);max-height:min(72dvh,720px)}
+.sc-x{position:absolute;top:calc(env(safe-area-inset-top,0px) + 12px);right:calc(env(safe-area-inset-right,0px) + 12px);z-index:2;min-width:44px;min-height:44px;border-radius:50%;border:2.5px solid var(--pink-t);background:rgba(61,35,70,.78);color:#fff;font:800 19px/1 var(--head);display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.sc-x:hover{background:var(--rose)}
+@keyframes scfade{from{opacity:0}to{opacity:1}}
+@keyframes scin{from{opacity:0;transform:translateY(16px) scale(.94)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.sc-backdrop,.sc-frame{animation:none}}
 .sbx{position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;align-items:center;justify-content:center;gap:12px;min-height:40px;padding:4px calc(env(safe-area-inset-right,0px) + 10px) 4px calc(env(safe-area-inset-left,0px) + 10px);padding-top:calc(env(safe-area-inset-top,0px) + 4px);background:#FFF3B0;color:#4A3B00;font:600 13px/1.3 var(--body);border-bottom:2px solid #E8C84A;box-shadow:0 2px 8px rgba(0,0,0,.08)}
 .sbx b{font-weight:800}
 .sbx button{min-height:32px;padding:4px 14px;border-radius:999px;border:2px solid #4A3B00;background:#fff;color:#4A3B00;font:700 13px var(--body);cursor:pointer}
@@ -1001,7 +1015,7 @@ html.msg-open .guide,html.msg-open .mbtn{display:none}
     <div class="logwrap">
       <div id="chatLog" role="log" aria-live="polite" aria-label="Messages"></div>
     </div>
-    <div id="quizProg" role="progressbar" aria-label="Quiz progress" aria-valuemin="0" aria-valuemax="11" aria-valuenow="0"></div>
+    <div id="quizProg" role="progressbar" aria-label="Quiz progress" aria-valuemin="0" aria-valuemax="9" aria-valuenow="0"></div>
     <div class="td-sugg" id="chatSugg"></div>
     <form class="composer" id="chatForm" autocomplete="off">
       <textarea id="chatInput" rows="1" aria-label="Message Teddy" placeholder="Say something to Teddy…"></textarea>
@@ -1082,6 +1096,16 @@ html.msg-open .guide,html.msg-open .mbtn{display:none}
   </div>
 </div>
 
+<!-- The card Pranav sent (26 Sep 2026). Shown once, to Divya only, with no words of ours on it:
+     the dialog's label is the accessible description of the creative, nothing more. -->
+<div class="sc" id="skyCard" role="dialog" aria-modal="true" aria-label="A warm night sky: a moon, a field of stars, and two bright stars joined by a hand-drawn line. The words on it read: we're a perfect match. Made this one myself, like the poem — P." hidden>
+  <div class="sc-backdrop" data-scclose></div>
+  <button class="sc-x" type="button" data-scclose aria-label="Close">✕</button>
+  <figure class="sc-frame">
+    <video id="scVid" poster="card/sky-card.png" muted loop playsinline preload="metadata" aria-hidden="true"><source src="card/sky-card.mp4" type="video/mp4"></video>
+  </figure>
+</div>
+
 <div class="guide" id="guide">
   <div class="gbubble" id="guideBubble" role="region" aria-label="Teddy's suggestion" aria-live="polite" hidden>
     <p class="gk">Teddy suggests</p>
@@ -1099,7 +1123,7 @@ html.msg-open .guide,html.msg-open .mbtn{display:none}
   const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
   const IST = 19800000, DAY = 86400000;
   const at = s => Date.parse(s + ":00+05:30");
-  const TAKEOFF = at("2026-09-25T22:00"), LAND = at("2026-09-26T00:40"), FLY_BACK = at("2026-09-29T06:15"), KOLKATA = at("2026-09-29T08:50");
+  const TAKEOFF = at("2026-09-25T22:00"), LAND = at("2026-09-26T00:40"), FLY_BACK = at("2026-09-29T06:15"), KOLKATA = at("2026-09-29T08:50"), CAB = at("2026-09-25T19:15");
   const FULL_MOON = Date.parse("2026-09-26T16:49:00Z"), SYN = 29.530588;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   let curView = "trip";  // which tab is showing: "trip" | "teddy" | "msg"
@@ -1123,7 +1147,7 @@ html.msg-open .guide,html.msg-open .mbtn{display:none}
      same for a local open (file://, ?chat=…, localhost), added 25 Sep 2026 after 25 "I'm Divya" sign-ins from
      disposable local contexts landed in her log: a browser driven without the webdriver flag looks exactly like her,
      so no local run may write here, ever. */
-  const EDITION = document.documentElement.dataset.edition || "main", VER = "2026-09-25d";
+  const EDITION = document.documentElement.dataset.edition || "main", VER = "2026-09-25f";
   const AUTOMATED = navigator.webdriver === true;
   const DEV = (() => { try { return location.protocol === "file:" || new URLSearchParams(location.search).has("chat") || /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname); } catch (e) { return false; } })();
   const VAPID_PUB = "BJ37Ji7zjpNibmXOJg_wH1wQe8FPChEwxpna3o9y-zYfNrsbWpbjk6aG7d3_zQ9ED0Z1q2Hbmq8tZrL0LrqgSrs";  // public only — the private half stays on Pranav's Mac
@@ -1250,11 +1274,7 @@ html.msg-open .guide,html.msg-open .mbtn{display:none}
 
   /* Links: maps and calendar */
   $$("[data-map]").forEach(a => { a.href = mapUrl(a.dataset.map); a.target = "_blank"; a.rel = "noopener"; });
-  const CAL = {
-    out: { text: "✈️ 6E 573 Kolkata → Bengaluru 🧸", dates: "20260925T163000Z/20260925T191000Z", location: "Kolkata airport",
-           details: "Seat 11F, window · Fast Forward, board first · veg meal + drink · cabin bag only, 7 kg · Pranav at Arrivals, T1, 00:40" },
-    back: { text: "✈️ QP 1561 Bengaluru → Kolkata (both of us)", dates: "20260929T004500Z/20260929T032000Z", location: "Kempegowda International Airport, Terminal 1",
-            details: "Cab at 4:00 am. Kolkata by 8:50 am." } };
+  const CAL = { out: { text: "✈️ 6E 573 Kolkata → Bengaluru 🧸", dates: "20260925T163000Z/20260925T191000Z", location: "Kolkata airport", details: "Seat 11F, window · Fast Forward, board first · veg meal + drink · cabin bag only, 7 kg · Pranav at Arrivals, T1, 00:40" }, back: { text: "✈️ QP 1561 Bengaluru → Kolkata (both of us)", dates: "20260929T004500Z/20260929T032000Z", location: "Kempegowda International Airport, Terminal 1", details: "Cab at 4:00 am. Kolkata by 8:50 am." } };
   $$("[data-cal]").forEach(a => { const c = CAL[a.dataset.cal]; a.href = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=" + encodeURIComponent(c.text) + "&dates=" + c.dates + "&details=" + encodeURIComponent(c.details) + "&location=" + encodeURIComponent(c.location); });
   $("#copyPnr")?.addEventListener("click", async e => {
     const b = e.currentTarget; log("copy_pnr", "pnr");
@@ -1288,29 +1308,7 @@ html.msg-open .guide,html.msg-open .mbtn{display:none}
   }
 
   /* Now & next */
-  const PLAN = [
-    ["2026-09-25T19:15", "2026-09-25T20:15", "Your cab to Kolkata airport", "I'm on call from here till takeoff.", "Netaji Subhas Chandra Bose International Airport Kolkata"],
-    ["2026-09-25T20:15", "2026-09-25T21:15", "Airport: ID, boarding pass, security", "Nothing to check in — straight to security.", "Netaji Subhas Chandra Bose International Airport Kolkata"],
-    ["2026-09-25T21:15", "2026-09-25T22:00", "At the gate · 6E 573", "Fast Forward: you board first.", null, "gate"],
-    ["2026-09-25T22:00", "2026-09-26T00:40", "Flying · 6E 573 · seat 11F", "I'll be at Arrivals.", null, "takeoff"],
-    ["2026-09-26T00:40", "2026-09-26T01:40", "Terminal 1, then home", "Straight out through Arrivals. I'm there.", "Kempegowda International Airport Terminal 1 Bengaluru", "land"],
-    ["2026-09-26T01:40", "2026-09-26T11:30", "Sleep in", "Your one job: wake me up.", "HSR Layout Bengaluru"],
-    ["2026-09-26T12:30", "2026-09-26T14:30", "KEK Singapore × Kopitiam Lah", "Moonlight hor fun on a full-moon day.", "Kopitiam Lah Indiranagar Bengaluru"],
-    ["2026-09-26T14:30", "2026-09-26T20:30", "Afternoon: your call", "Arcade, board games, or PS5 and a nap.", null, null, "sat-pm"],
-    ["2026-09-26T21:00", "2026-09-26T22:30", "Pratyush Chaubey, live", "The Comedy Theatre, 12th Main.", "The Comedy Theatre Indiranagar Bengaluru"],
-    ["2026-09-26T22:30", "2026-09-27T01:00", "The full moon, then Koramangala", "Look up first. Then we dance.", null, null, "sat-night"],
-    ["2026-09-27T08:00", "2026-09-27T10:30", "ISKCON darshan, if you like", "About 20 minutes from lunch.", "ISKCON Temple Rajajinagar Bengaluru", null, "sun-iskcon"],
-    ["2026-09-27T12:00", "2026-09-27T13:30", "Tijouri — lunch", "Dress a little fancy.", "Tijouri Radisson Blu Atria Bengaluru"],
-    ["2026-09-27T13:30", "2026-09-27T17:15", "Cubbon Park, then Basavanagudi", "Bull Temple is on the same road.", "Cubbon Park Bengaluru"],
-    ["2026-09-27T17:45", "2026-09-27T18:45", "Srimad Bhagavad Gita talk", "Ramakrishna Math. Shoes off, phone on silent.", "Ramakrishna Math Bull Temple Road Basavanagudi Bengaluru"],
-    ["2026-09-27T19:00", "2026-09-27T19:30", "Arati and bhajans", "If you'd like to stay.", "Ramakrishna Math Bull Temple Road Basavanagudi Bengaluru"],
-    ["2026-09-27T19:30", "2026-09-27T20:45", "Dinner, Indiranagar", "Then music.", null],
-    ["2026-09-27T21:00", "2026-09-27T23:30", "Curtain Blue, live", "The Humming Tree.", "The Humming Tree Indiranagar Bengaluru"],
-    ["2026-09-28T09:00", "2026-09-28T22:00", "Nothing, on purpose", "PS5, your songs, home food, tiramisu, momos.", "HSR Layout Bengaluru"],
-    ["2026-09-29T04:00", "2026-09-29T05:15", "Cab to the airport", "Sleepy hugs allowed.", "Kempegowda International Airport Terminal 1 Bengaluru"],
-    ["2026-09-29T06:15", "2026-09-29T08:50", "Flying home · QP 1561", "Both of us.", null, "home"],
-    ["2026-09-29T08:50", "2026-09-29T13:00", "Kolkata. Your city.", "Your theatre, your pick of film.", null],
-  ].map(p => ({ s: at(p[0]), e: at(p[1]), title: p[2], note: p[3], map: p[4], letter: p[5], q: p[6] }));
+  const PLAN = [["2026-09-25T19:15", "2026-09-25T20:15", "Your cab to Kolkata airport", "I'm on call from here till takeoff.", "Netaji Subhas Chandra Bose International Airport Kolkata"], ["2026-09-25T20:15", "2026-09-25T21:15", "Airport: ID, boarding pass, security", "Nothing to check in — straight to security.", "Netaji Subhas Chandra Bose International Airport Kolkata"], ["2026-09-25T21:15", "2026-09-25T22:00", "At the gate · 6E 573", "Fast Forward: you board first.", null, "gate"], ["2026-09-25T22:00", "2026-09-26T00:40", "Flying · 6E 573 · seat 11F", "I'll be at Arrivals.", null, "takeoff"], ["2026-09-26T00:40", "2026-09-26T01:40", "Terminal 1, then home", "Straight out through Arrivals. I'm there.", "Kempegowda International Airport Terminal 1 Bengaluru", "land"], ["2026-09-26T01:40", "2026-09-26T11:30", "Sleep in", "Your one job: wake me up.", "HSR Layout Bengaluru"], ["2026-09-26T12:30", "2026-09-26T14:30", "KEK Singapore × Kopitiam Lah", "Moonlight hor fun on a full-moon day.", "Kopitiam Lah Indiranagar Bengaluru"], ["2026-09-26T14:30", "2026-09-26T20:30", "Afternoon: your call", "Arcade, board games, or PS5 and a nap.", null, null, "sat-pm"], ["2026-09-26T21:00", "2026-09-26T22:30", "Pratyush Chaubey, live", "The Comedy Theatre, 12th Main.", "The Comedy Theatre Indiranagar Bengaluru"], ["2026-09-26T22:30", "2026-09-27T01:00", "The full moon, then Koramangala", "Look up first. Then we dance.", null, null, "sat-night"], ["2026-09-27T08:00", "2026-09-27T10:30", "ISKCON darshan, if you like", "About 20 minutes from lunch.", "ISKCON Temple Rajajinagar Bengaluru", null, "sun-iskcon"], ["2026-09-27T12:00", "2026-09-27T13:30", "Tijouri — lunch", "Dress a little fancy.", "Tijouri Radisson Blu Atria Bengaluru"], ["2026-09-27T13:30", "2026-09-27T17:15", "Cubbon Park, then Basavanagudi", "Bull Temple is on the same road.", "Cubbon Park Bengaluru"], ["2026-09-27T17:45", "2026-09-27T18:45", "Srimad Bhagavad Gita talk", "Ramakrishna Math. Shoes off, phone on silent.", "Ramakrishna Math Bull Temple Road Basavanagudi Bengaluru"], ["2026-09-27T19:00", "2026-09-27T19:30", "Arati and bhajans", "If you'd like to stay.", "Ramakrishna Math Bull Temple Road Basavanagudi Bengaluru"], ["2026-09-27T19:30", "2026-09-27T20:45", "Dinner, Indiranagar", "Then music.", null], ["2026-09-27T21:00", "2026-09-27T23:30", "Curtain Blue, live", "The Humming Tree.", "The Humming Tree Indiranagar Bengaluru"], ["2026-09-28T09:00", "2026-09-28T22:00", "Nothing, on purpose", "PS5, your songs, home food, tiramisu, momos.", "HSR Layout Bengaluru"], ["2026-09-29T04:00", "2026-09-29T05:15", "Cab to the airport", "Sleepy hugs allowed.", "Kempegowda International Airport Terminal 1 Bengaluru"], ["2026-09-29T06:15", "2026-09-29T08:50", "Flying home · QP 1561", "Both of us.", null, "home"], ["2026-09-29T08:50", "2026-09-29T13:00", "Kolkata. Your city.", "Your theatre, your pick of film.", null]].map(p => ({ s: at(p[0]), e: at(p[1]), title: p[2], note: p[3], map: p[4], letter: p[5], q: p[6] }));
   const plan = () => PLAN.filter(p => !(p.q === "sun-iskcon" && choices["sun-iskcon"] === "sleep"));  // her choices shape the plan
   const planNote = p => (p.q === "sat-pm" || p.q === "sat-night") && choices[p.q] && !["later", "see"].includes(choices[p.q]) ? `You picked: ${optLabel(p.q, choices[p.q])}.` : p.note;
   const planNow = () => { const now = Date.now(); return plan().find(p => p.s <= now && now < p.e); };
@@ -1394,25 +1392,9 @@ html.msg-open .guide,html.msg-open .mbtn{display:none}
     if (Object.values(packed).filter(Boolean).length === PACK.length) log("pack_done", "all", PACK.length); renderGuide(); });
 
   /* Letters */
-  const LETTERS = [
-    { id: "now", title: "Open now", ic: "💌", unlock: null,
-      body: "<p>8th standard: my first original poem, for you.<br>This: a detailed layout, for you.<br>Worse rhymes, better logistics.</p><p>And like I said on the 16th: this is the last time you had to yearn.</p>" },
-    { id: "nervous", title: "Open when you're nervous", ic: "🫶", unlock: null,
-      body: "<p>Breathe. You moved cities this month; an airport is nothing after that. Every step is written down, the cab is booked, and I'm one call away the whole time.</p><p>Nervous is allowed. You're just not doing any of this alone.</p>" },
-    { id: "gate", title: "Open at the gate", ic: "🎫", unlock: "2026-09-25T21:00",
-      body: "<p>You made it to the gate — the hard part, done on your own. I'm proud of you.</p><p>Text me before the doors close.</p>" },
-    { id: "takeoff", title: "Open after takeoff", ic: "✈️", unlock: "2026-09-25T22:00",
-      body: "<p>You're flying. Eleven years of calls, and now a plane is covering the last 1,550 km.</p><p>Eat the meal, look out of 11F, put a song on. By the time you land, I'll be at Arrivals.</p>" },
-    { id: "land", title: "Open when you land", ic: "🌕", unlock: "2026-09-26T00:40",
-      body: "<p>Welcome to Bengaluru.</p><p>Walk out through Arrivals — I'm the one who can't stop smiling.</p>" },
-    { id: "miss", title: "Open when you miss home", ic: "🏠", unlock: null,
-      body: "<p>Kolkata will be right where you left it, and on Tuesday I'll fly you back to it myself.</p><p>Till then, my home is yours: your own room, the fam, the PS5, and momos on demand.</p>" },
-    { id: "home", title: "Open on the flight home", ic: "🧸", unlock: "2026-09-29T06:15",
-      body: "<p>Four days, and the first meeting is done. Thank you for saying yes.</p><p>Next time won't take eleven years.</p>" },
-  ];
+  const LETTERS = [{ id: "now", title: "Open now", ic: "💌", unlock: null, body: "<p>8th standard: my first original poem, for you.<br>This: a detailed layout, for you.<br>Worse rhymes, better logistics.</p><p>And like I said on the 16th: this is the last time you had to yearn.</p>" }, { id: "nervous", title: "Open when you're nervous", ic: "🫶", unlock: null, body: "<p>Breathe. You moved cities this month; an airport is nothing after that. Every step is written down, the cab is booked, and I'm one call away the whole time.</p><p>Nervous is allowed. You're just not doing any of this alone.</p>" }, { id: "gate", title: "Open at the gate", ic: "🎫", unlock: "2026-09-25T21:00", body: "<p>You made it to the gate — the hard part, done on your own. I'm proud of you.</p><p>Text me before the doors close.</p>" }, { id: "takeoff", title: "Open after takeoff", ic: "✈️", unlock: "2026-09-25T22:00", body: "<p>You're flying. Eleven years of calls, and now a plane is covering the last 1,550 km.</p><p>Eat the meal, look out of 11F, put a song on. By the time you land, I'll be at Arrivals.</p>" }, { id: "land", title: "Open when you land", ic: "🌕", unlock: "2026-09-26T00:40", body: "<p>Welcome to Bengaluru.</p><p>Walk out through Arrivals — I'm the one who can't stop smiling.</p>" }, { id: "miss", title: "Open when you miss home", ic: "🏠", unlock: null, body: "<p>Kolkata will be right where you left it, and on Tuesday I'll fly you back to it myself.</p><p>Till then, my home is yours: your own room, the fam, the PS5, and momos on demand.</p>" }, { id: "home", title: "Open on the flight home", ic: "🧸", unlock: "2026-09-29T06:15", body: "<p>Four days, and the first meeting is done. Thank you for saying yes.</p><p>Next time won't take eleven years.</p>" }];
   let read = store.get("booklet-letters", {});  // id -> first-opened time (true = opened in an older version)
-  const LTHEME = { now: ["#FF4F8B", "#FFE0EB"], nervous: ["#2EC4A0", "#D5F7EE"], gate: ["#FFB800", "#FFF0C2"], takeoff: ["#3FA9F5", "#DDF0FF"],
-                   land: ["#8C6BFF", "#EAE3FF"], miss: ["#FF8A4C", "#FFE3D3"], home: ["#FF4F8B", "#FFE0EB"] };
+  const LTHEME = { now: ["#FF4F8B", "#FFE0EB"], nervous: ["#2EC4A0", "#D5F7EE"], gate: ["#FFB800", "#FFF0C2"], takeoff: ["#3FA9F5", "#DDF0FF"], land: ["#8C6BFF", "#EAE3FF"], miss: ["#FF8A4C", "#FFE3D3"], home: ["#FF4F8B", "#FFE0EB"] };
   const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const fmtStamp = t => { const d = ist(t); return `${DOW[d.getUTCDay()]} ${d.getUTCDate()} ${MON[d.getUTCMonth()]}, ${fmtTime(t)}`; };
   const isLocked = l => !!l.unlock && Date.now() < at(l.unlock);
@@ -1507,13 +1489,7 @@ html.msg-open .guide,html.msg-open .mbtn{display:none}
   $("#send").addEventListener("click", () => { log("marks_send", "whatsapp", Object.values(marks).filter(Boolean).length); guide.sent = true; saveGuide(); renderGuide(); });
 
   /* Choices — only where the plan already offers options. Nothing is binding; every one has an easy "later". */
-  const CHOICES = {
-    "sat-pm": { opts: [["arcade", "Arcade 🕹️"], ["boardgames", "Board-game café 🎲"], ["ps5", "PS5 and a nap 🎮"], ["later", "I'll decide on the day ✨"]] },
-    "sun-iskcon": { opts: [["yes", "Yes, let's 🪔"], ["sleep", "Sleep in instead 😴"], ["later", "See how Sunday feels ✨"]] },
-    "sat-night": { opts: [["dance", "Dance till I'm tired 💃"], ["one", "One dance, then home 🌙"], ["moon", "Just the moon, then bed 🌕"], ["see", "See how I feel ✨"]] },  // asked by Teddy, shown on the plan
-    "mon-pick": { opts: [["movie", "A movie 🎬"], ["tiramisu", "A tiramisu hunt 🍰"], ["momos", "Momos, again 🥟"], ["iskcon", "ISKCON together 🪔"], ["home", "Just home 🏡"], ["later", "Let Monday decide ✨"]] },
-    "food": { multi: true, opts: [["sushi", "Sushi 🍣"], ["momos", "Momos 🥟"], ["homefood", "Home food 🍛"], ["tiramisu", "Tiramisu 🍰"], ["surprise", "Surprise me ✨"]] },
-  };
+  const CHOICES = { "sat-pm": { opts: [["arcade", "Arcade 🕹️"], ["boardgames", "Board-game café 🎲"], ["ps5", "PS5 and a nap 🎮"], ["later", "I'll decide on the day ✨"]] }, "sun-iskcon": { opts: [["yes", "Yes, let's 🪔"], ["sleep", "Sleep in instead 😴"], ["later", "See how Sunday feels ✨"]] }, "sat-night": { opts: [["dance", "Dance till I'm tired 💃"], ["one", "One dance, then home 🌙"], ["moon", "Just the moon, then bed 🌕"], ["see", "See how I feel ✨"]] }, "mon-pick": { opts: [["movie", "A movie 🎬"], ["tiramisu", "A tiramisu hunt 🍰"], ["momos", "Momos, again 🥟"], ["iskcon", "ISKCON together 🪔"], ["home", "Just home 🏡"], ["later", "Let Monday decide ✨"]] }, food: { multi: true, opts: [["sushi", "Sushi 🍣"], ["momos", "Momos 🥟"], ["homefood", "Home food 🍛"], ["tiramisu", "Tiramisu 🍰"], ["surprise", "Surprise me ✨"]] } };
   const SINGLE_QS = ["sat-pm", "sun-iskcon", "mon-pick"];
   let choices = store.get("booklet-choices", {}); if (!choices || typeof choices !== "object" || Array.isArray(choices)) choices = {};
   const optLabel = (q, id) => { const o = (CHOICES[q] || { opts: [] }).opts.find(x => x[0] === id); return o ? o[1] : ""; };
@@ -1586,7 +1562,7 @@ html.msg-open .guide,html.msg-open .mbtn{display:none}
   const gBtn = $("#guideBtn"), gBub = $("#guideBubble"), gText = $("#guideText"), gGo = $("#guideGo"), gLater = $("#guideLater"), gSkip = $("#guideSkip"), gClose = $("#guideClose");
   const SHORT_PART = { a: "how you get here", b: "Saturday", c: "Sunday", d: "Monday", e: "Tuesday" }, PART_CARD = { a: "fri", b: "sat", c: "sun", d: "mon", e: "tue" };
   const GUIDE_Q = { "sat-pm": "Saturday afternoon is yours to pick.", "sun-iskcon": "Sunday morning: darshan, or sleep in? Either is lovely.", "mon-pick": "Monday is nothing, on purpose — but if you had to pick one thing?" };
-  const since = prevVisit || sessionStart, CAB = at("2026-09-25T19:15");
+  const since = prevVisit || sessionStart;
   const Q_UNTIL = { "sat-pm": at("2026-09-26T14:30"), "sun-iskcon": at("2026-09-27T08:00"), "mon-pick": at("2026-09-28T09:00") };  // stop asking once the moment has passed
   const skipped = id => !!guide.skipped[id];
   const gWaitingLetters = () => LETTERS.filter(l => !isLocked(l) && !read[l.id] && !skipped("letter:" + l.id));
@@ -1595,13 +1571,13 @@ html.msg-open .guide,html.msg-open .mbtn{display:none}
     const now = Date.now(), out = [];
     if (now < CAB && CAB - now <= 4 * 3600000) out.push({ id: "tonight", time: true, text: "Tonight: cab at 7:15 pm. The 'nervous' letter is there whenever you like.", target: "#fri", place: "fri" });
     const fresh = LETTERS.filter(l => l.unlock && !read[l.id] && at(l.unlock) <= now && at(l.unlock) > since).sort((a, b) => at(b.unlock) - at(a.unlock))[0];
-    if (fresh) out.push({ id: "unlock:" + fresh.id, time: true, text: `'${fresh.title}' just unlocked 💌`, target: "#letters", place: "letters" });
+    if (fresh) out.push({ id: "unlock:" + fresh.id, time: true, text: `'${fresh.title}' just unlocked 💌`, target: `.env[data-letter="${fresh.id}"]`, place: "letters", letter: fresh.id, cta: "Open it 💌" });
     if (now >= CAB && now < KOLKATA) { const cur = planNow(); if (cur) out.push({ id: "now", time: true, text: `Now — ${cur.title}`, target: "#nownext", place: "nownext" }); }
     const nPack = Object.values(packed).filter(Boolean).length;
     if (!skipped("pack") && nPack < PACK.length && now < TAKEOFF) out.push({ id: "pack", text: `Start with the chota suitcase — ${nPack} of ${PACK.length} packed.`, target: "#pack", place: "pack" });
     for (const k of "abcde") if (!marks[k] && !skipped("read-" + k)) out.push({ id: "read-" + k, text: `Next: Part (${k}), ${SHORT_PART[k]}. Tap the heart at the end when you've read it.`, target: "#" + PART_CARD[k], place: PART_CARD[k] });
     for (const q of gOpenQs()) out.push({ id: q, text: GUIDE_Q[q], target: `.choices[data-q="${q}"]`, place: q });
-    for (const w of gWaitingLetters()) out.push({ id: "letter:" + w.id, text: `A letter is waiting: '${w.title}'.`, target: "#letters", place: "letters" });
+    for (const w of gWaitingLetters()) out.push({ id: "letter:" + w.id, text: `A letter is waiting: '${w.title}'.`, target: `.env[data-letter="${w.id}"]`, place: "letters", letter: w.id, cta: "Open it" });
     if (Object.values(marks).filter(Boolean).length === 5 && !guide.sent && !skipped("marks")) out.push({ id: "marks", text: "Full marks or not, the examiner's report can go to Pranav whenever you like.", target: "#marks", place: "marks" });
     if (!out.length) out.push({ id: "done", done: true, text: "That's everything for now. The big Teddy up top is for hugs.", target: null, place: null });
     return out;
@@ -1642,6 +1618,7 @@ html.msg-open .guide,html.msg-open .mbtn{display:none}
   function goThere() {
     const st = gCur; log("guide", "go", st.agent ? st.place || st.id : st.id); closeGuide(null, false);
     if (st.place === "teddy") { openTeddy("guide", gBtn); return; }  // the guide may send her to the chat itself
+    if (st.letter) { openLetter(st.letter); return; }  // a letter step: open that envelope
     const el = st.target && $(st.target); if (!el) return;
     el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
     el.classList.remove("hl"); void el.offsetWidth; el.classList.add("hl"); setTimeout(() => el.classList.remove("hl"), 2100);
@@ -1688,7 +1665,8 @@ html.msg-open .guide,html.msg-open .mbtn{display:none}
   function applyGuide(g, asked) {
     if (!g || gBub.hidden || !gStep || typeof g.say !== "string" || !g.say.trim()) return false;
     const place = typeof g.target === "string" && GUIDE_PLACES.some(([id]) => id === g.target) ? g.target : null;
-    gCur = { id: gStep.id, time: gStep.time, done: false, text: g.say.trim().slice(0, 240), target: PLACE_SEL(place), place, stepPlace: gStep.place, agent: true, cta: String(g.cta || "").trim().slice(0, 24) || "Take me there" };
+    const isLetter = !!gStep.letter;  // a letter step: the page owns the envelope and the action; Teddy only words it
+    gCur = { id: gStep.id, time: gStep.time, done: false, text: g.say.trim().slice(0, 240), target: isLetter ? `.env[data-letter="${gStep.letter}"]` : PLACE_SEL(place), place: isLetter ? gStep.place : place, stepPlace: gStep.place, agent: true, cta: isLetter ? "Open it 💌" : (String(g.cta || "").trim().slice(0, 24) || "Take me there"), letter: isLetter ? gStep.letter : undefined };
     fillBubble(); log("guide", asked ? "answer" : "agent", place || "none");
     return true;
   }
@@ -1944,100 +1922,17 @@ html.msg-open .guide,html.msg-open .mbtn{display:none}
   const LOCAL = () => AUTOMATED || navigator.onLine === false;
   const tdView = $("#teddyView"), tripView = $("#tripView"), tabTeddy = $("#tabTeddy"), tabTrip = $("#tabTrip"), tabMsg = $("#tabMsg"), msgView = $("#msgView");
   const tdLog = $("#chatLog"), tdSugg = $("#chatSugg"), tdInput = $("#chatInput"), tdSend = $("#chatSend"), tdForm = $("#chatForm"), tdProg = $("#quizProg"), tdRedo = $("#quizRedo"), tdLater = $("#quizLater");
-  /* The quiz, v2 (25 Sep 2026). Part 1 — the trip: eleven answers that shape the days (pace, the first hour, her afternoons and
-     nights, the kitchen, photos); four land straight on the plan (choice:), the rest go to Pranav. Part 2 — you: nine about how
-     she recharges, what reads as care and how she signals a breather — the psychology of looking after someone, in Teddy's voice.
+  /* The quiz, v3 (25 Sep 2026). Part 1 — the trip: nine questions about SHAPE, not stuff (how full a day should feel, how much
+     she wants to know in advance, when her energy turns up, the first hour after landing, nerves, how she takes a plan slipping,
+     photos, what's off every list, one wish). Deliberately nothing here names a place, a dish or an activity, and NOTHING writes
+     to the trip plan (no choice:) — the plan lives on the trip tab, and the days stay open to be discovered. Part 2 — you: nine
+     about how she recharges, what reads as care and how she signals a breather — the psychology of looking after someone.
      Every option carries Teddy's own line (opts: [value, label, reaction]); every question has Skip; "Later" pauses the whole thing. */
-  const QUIZ_V = 2;
+  const QUIZ_V = 3;
   const CHAPTERS = { trip: { n: 1, title: "The trip" }, you: { n: 2, title: "You" } };
-  const QUIZ = [
-    { id: "pace", kind: "trip", big: true, q: "First, the big one. How full should a day be?", opts: [
-      ["slow", "Slow. One thing, done properly 🍃", "Then the plan breathes: one good thing a day, and the rest is yours."],
-      ["mix", "One plan, then we see ✨", "One anchor a day and soft afternoons. Bear-approved pacing."],
-      ["full", "Pack it in, I'll sleep on the flight home 🎢", "Seatbelt sign on. He'll keep the snacks coming."],
-      ["ask", "Ask me each morning ☀️", "A fresh 'what do you feel like?' every morning. I like a day that listens."]] },
-    { id: "landing", kind: "trip", big: true, q: "It's 1 AM on Saturday and you've just landed. The first hour at home?", opts: [
-      ["talk", "Talk till I fall asleep 🌙", "That was his pitch too. The kettle is on standby."],
-      ["sleep", "Straight to bed, we talk at breakfast 😴", "Bed it is. Breakfast conversations are the best kind anyway."],
-      ["food", "Feed me first 🍜", "The kitchen has been warned. Something warm will be waiting."],
-      ["see", "I'll know when I land ✨", "Fair. The first hour is yours to call — nothing is scheduled."]] },
-    { id: "nervous", kind: "trip", scale: 10, ends: ["cool as a cucumber", "hold my hand"], q: "Flight nerves, honestly — 1 to 10? (First solo flight: a 7 is allowed.)",
-      react: ["Steady hands. I'll still be at Arrivals, just in case.", "Exactly right for a first one. Every step is written down, and he's one call away.", "Then we take it in small steps, together: cab, ID, gate, seat 11F — and he's on the line the whole way."] },
-    { id: "satpm", kind: "trip", choice: "sat-pm", q: "Saturday afternoon, your call:", opts: [
-      ["arcade", "Arcade 🕹️", "Arcade. He's worse at the claw machine than he'll admit."],
-      ["boardgames", "Board-game café 🎲", "Board games. Fair warning: he takes Ludo personally."],
-      ["ps5", "PS5 and a nap 🎮", "PS5 and a nap — the most honest afternoon on the list."],
-      ["later", "Surprise me ✨", "Kept open. Saturday will tell us."]] },
-    { id: "night", kind: "trip", choice: "sat-night", q: "Saturday night, after the comedy show — how late is late?", opts: [
-      ["dance", "Dance till I'm tired 💃", "Dancing shoes confirmed. He's stretching already."],
-      ["one", "One dance, then home 🌙", "One dance, then home. A perfect shape for a night."],
-      ["moon", "Just the moon, then bed 🌕", "Look up at 10:19, then bed. The moon will understand."],
-      ["see", "See how I feel ✨", "The night stays open. Whatever you say at 10 pm goes."]] },
-    { id: "iskcon", kind: "trip", choice: "sun-iskcon", q: "Sunday morning darshan — in, or is sleep the darshan?", opts: [
-      ["yes", "Yes, let's 🪔", "Lovely. Early chai, modest clothes, a quiet temple."],
-      ["sleep", "Sleep in instead 😴", "Sleep is a kind of prayer too. ISKCON comes off the plan — easy to put back."],
-      ["later", "See how Sunday feels ✨", "Sunday will know. Either way is lovely."]] },
-    { id: "food", kind: "trip", choice: "food", multi: true, q: "The kitchen asks: what should be on the table this week? Tap all that apply.", opts: [
-      ["sushi", "Sushi 🍣"], ["momos", "Momos 🥟"], ["homefood", "Home food 🍛"], ["tiramisu", "Tiramisu 🍰"], ["surprise", "Surprise me ✨"]],
-      react: "Noted for the kitchen: {a}. The list on the trip tab just updated itself." },
-    { id: "foodno", kind: "trip", text: true, q: "Anything you don't eat, or can't stand? Say it once and it's off every list.", react: "Struck off every list. Consider it gone." },
-    { id: "monpick", kind: "trip", choice: "mon-pick", q: "Monday is nothing, on purpose. But if you had to pick one thing:", opts: [
-      ["movie", "A movie 🎬", "A movie it is. Popcorn included."],
-      ["tiramisu", "A tiramisu hunt 🍰", "A tiramisu hunt. I know a bear who'll carry the spoons."],
-      ["momos", "Momos, again 🥟", "Momos, again. Five plates was only ever a starting point."],
-      ["iskcon", "ISKCON together 🪔", "ISKCON together, at a gentle Monday pace."],
-      ["home", "Just home 🏡", "Just home. Songs on, feet up, nowhere to be."],
-      ["later", "Let Monday decide ✨", "Monday decides. That's the whole point of Monday."]] },
-    { id: "photos", kind: "trip", q: "Photos this trip?", opts: [
-      ["lots", "Lots — I want proof 📸", "He shoots, you approve. Nothing goes anywhere without your yes."],
-      ["few", "A few, no posing 🙂", "A few candid ones, no 'say cheese'. Clean."],
-      ["none", "Live it, don't shoot it 🌿", "Phones down, then. Some things are better kept in the head."],
-      ["ask", "Ask me each time ✨", "Every single time. That's the rule now."]] },
-    { id: "wish", kind: "trip", text: true, q: "One thing you'd like to do in Bengaluru that isn't on the plan yet?", react: "Passing this to Pranav with a big heart drawn on it." },
-    { id: "recharge", kind: "you", big: true, q: "After a big day, you recharge by…", opts: [
-      ["alone", "An hour alone, no talking 📱", "An hour alone is easy to give. Your room has a door and a good lamp."],
-      ["one", "One person, low volume 🕯️", "Low volume, one person. He can do quiet; I've seen it."],
-      ["people", "More people, more noise 🎉", "Noise it is. The fam is very good at noise."],
-      ["sleep", "Sleep. Just sleep 😴", "Sleep, the original recharge. Nobody will wake you."]] },
-    { id: "space", kind: "you", q: "When you need a breather, how would we know?", opts: [
-      ["say", "I'll just say it 🗣️", "Then he'll hear it and say 'of course'. Easy."],
-      ["quiet", "I go quiet — read the room 🤫", "Quiet means breather, not upset. Noted, and passed on."],
-      ["walk", "I'll take a walk 🚶", "A walk means space. He won't follow unless you wave."],
-      ["none", "I won't need one… probably 😄", "Probably. The door's there if 'probably' changes."]] },
-    { id: "care", kind: "you", q: "What actually feels like being looked after?", opts: [
-      ["remember", "Small things, remembered 🧠", "Then he's in luck — small things are his whole style."],
-      ["time", "Undivided time, phone face-down ⏳", "Face-down phones. Passing this on in capital letters."],
-      ["words", "Being told, plainly, in words 💬", "Plain words, said in daylight. He's practising."],
-      ["acts", "Things quietly handled before I ask 🧺", "Quiet handling — the cab, the charger, the water bottle. On it."]] },
-    { id: "low", kind: "you", q: "On an off day, what helps most?", opts: [
-      ["listen", "Someone who just listens 🫂", "Listening, no fixing. Noted for every off day, trip or no trip."],
-      ["food", "Food, delivered, no questions 🍜", "Food first, questions later. A very good policy."],
-      ["space", "Space, then a call 📞", "Space first, then a call. He'll wait for the second part."],
-      ["laugh", "Something to make me laugh 😄", "Then it's a good thing Saturday is a comedy show."]] },
-    { id: "reassure", kind: "you", q: "Say a phone dies for a few hours. When it's back, the first thing you'd want to hear?", opts: [
-      ["where", "Where he was, simply 📍", "A plain 'here's where I was'. Told him. Twice."],
-      ["fine", "That everything's okay 🫶", "'All good, I'm here' — first line, every time."],
-      ["sorry", "A sorry, then the story 🙂", "Sorry first, story second. Fair order."],
-      ["none", "Nothing — I don't count hours ✨", "Generous. He'll still text, because updates are his job now."]] },
-    { id: "tell", kind: "you", q: "Your tell when you're tired but too polite to say?", opts: [
-      ["quiet", "I go quiet 🤫", "Quiet means tired. He'll read it and find a sofa."],
-      ["yes", "I say yes to everything 🙃", "Then a too-easy yes gets a gentle 'sure?' from him. Once."],
-      ["phone", "I vanish into my phone 📱", "Phone-scroll means wind-down. He won't take it personally."],
-      ["short", "Short answers 😶", "Short answers mean 'home, please'. Understood."]] },
-    { id: "decide", kind: "you", q: "When someone asks 'what do you want to do?', you…", opts: [
-      ["know", "Know instantly 🎯", "Then he'll ask, and actually do the thing."],
-      ["two", "Want two options, not ten 🔀", "Two options, no menus. That's how the plan is written."],
-      ["you", "Say 'you pick' and mean it 😌", "He picks, you veto. That's the deal."],
-      ["fake", "Say 'you pick' but do have a preference 😅", "Then 'you pick' gets a gentle second ask. Preferences welcome."]] },
-    { id: "perfect", kind: "you", text: true, q: "A perfect, ordinary Sunday — in one line?", react: "That's the kind of Sunday worth planning around. Filed, with care." },
-    { id: "feel", kind: "you", big: true, q: "Last one. If this trip gets to make you feel one thing, what should it be?", opts: [
-      ["home", "Like coming home 🏡", "Then that's the whole plan. Consider it my job too."],
-      ["kid", "Like being twelve again ✨", "Twelve again. A bear could not ask for a better brief."],
-      ["calm", "Calm, no rush 🍃", "Calm, no rush. The plan has gaps on purpose."],
-      ["loved", "Looked-after 🧸", "Looked-after — the one thing he's been rehearsing for."]] },
-  ];
+  const QUIZ = [{ id: "pace", kind: "trip", big: true, q: "First, the big one. How full should a day feel?", opts: [["slow", "Slow. One thing, done properly 🍃", "Then the plan breathes: one good thing a day, and the rest is yours."], ["mix", "One plan, then we see ✨", "One anchor a day and soft afternoons. Bear-approved pacing."], ["full", "Pack it in, I'll sleep on the flight home 🎢", "Seatbelt sign on. He'll keep the snacks coming."], ["ask", "Ask me each morning ☀️", "A fresh 'what do you feel like?' every morning. I like a day that listens."]] }, { id: "openness", kind: "trip", big: true, q: "How much of the trip do you want to know in advance?", opts: [["nothing", "Nothing — let it unfold 🌿", "Then nothing gets promised in advance. The days can just happen."], ["shape", "The shape, not the details 🧭", "A rough shape with soft edges. That's how the good days get made."], ["know", "I like knowing the plan ☀️", "Then you'll always know what's next — and it's yours to change."], ["together", "Decide it together, day by day ✨", "A small morning huddle, every day. I like a trip that talks."]] }, { id: "energy", kind: "trip", q: "When does your best energy turn up?", opts: [["morning", "Mornings ☀️", "Mornings it is. The good coffee will be ready before you are."], ["afternoon", "Afternoons 🌤️", "Afternoons then — slow starts, strong middles."], ["night", "Late, once it's dark 🌙", "A night person. Noted, and the moon is on your side this week."], ["varies", "Honestly, it varies 🎲", "Then we read the day, not the clock. Easy."]] }, { id: "landing", kind: "trip", big: true, q: "You land close to midnight. The first hour at home?", opts: [["talk", "Talk till I fall asleep 🌙", "That was his pitch too. The kettle is on standby."], ["sleep", "Straight to bed, we talk at breakfast 😴", "Bed it is. Breakfast conversations are the best kind anyway."], ["food", "Feed me first 🍜", "The kitchen has been warned. Something warm will be waiting."], ["see", "I'll know when I land ✨", "Fair. The first hour is yours to call — nothing is scheduled."]] }, { id: "nervous", kind: "trip", scale: 10, ends: ["cool as a cucumber", "hold my hand"], q: "Flight nerves, honestly — 1 to 10? (First solo flight: a 7 is allowed.)", react: ["Steady hands. I'll still be at Arrivals, just in case.", "Exactly right for a first one. Every step is written down, and he's one call away.", "Then we take it in small steps, together: cab, ID, gate, seat 11F — and he's on the line the whole way."] }, { id: "surprise", kind: "trip", q: "A plan falls through at the last minute. You'd feel…", opts: [["relieved", "Relieved, honestly 🍃", "Then we'll hold plans lightly. Good things don't need a schedule."], ["fine", "Fine — we'll find something 🔀", "Improvising is a skill. I've seen him do it with dinner."], ["sad", "A little sad — I was looking forward to it 🙂", "Then he'll make it up to you properly. He's good at that part."], ["depends", "Depends on the day 🌦️", "Depends on the day. Noted for every single day."]] }, { id: "photos", kind: "trip", q: "Photos this trip?", opts: [["lots", "Lots — I want proof 📸", "He shoots, you approve. Nothing goes anywhere without your yes."], ["few", "A few, no posing 🙂", "A few candid ones, no 'say cheese'. Clean."], ["none", "Live it, don't shoot it 🌿", "Phones down, then. Some things are better kept in the head."], ["ask", "Ask me each time ✨", "Every single time. That's the rule now."]] }, { id: "foodno", kind: "trip", text: true, q: "Anything you don't eat, or can't stand? Say it once and it's off every list.", react: "Struck off every list. Consider it gone." }, { id: "wish", kind: "trip", text: true, q: "One wish for this trip — anything at all, planned or not?", react: "Passing this to Pranav with a big heart drawn on it." }, { id: "recharge", kind: "you", big: true, q: "After a big day, you recharge by…", opts: [["alone", "An hour alone, no talking 📱", "An hour alone is easy to give. Your room has a door and a good lamp."], ["one", "One person, low volume 🕯️", "Low volume, one person. He can do quiet; I've seen it."], ["people", "More people, more noise 🎉", "Noise it is. The fam is very good at noise."], ["sleep", "Sleep. Just sleep 😴", "Sleep, the original recharge. Nobody will wake you."]] }, { id: "space", kind: "you", q: "When you need a breather, how would we know?", opts: [["say", "I'll just say it 🗣️", "Then he'll hear it and say 'of course'. Easy."], ["quiet", "I go quiet — read the room 🤫", "Quiet means breather, not upset. Noted, and passed on."], ["walk", "I'll take a walk 🚶", "A walk means space. He won't follow unless you wave."], ["none", "I won't need one… probably 😄", "Probably. The door's there if 'probably' changes."]] }, { id: "care", kind: "you", q: "What actually feels like being looked after?", opts: [["remember", "Small things, remembered 🧠", "Then he's in luck — small things are his whole style."], ["time", "Undivided time, phone face-down ⏳", "Face-down phones. Passing this on in capital letters."], ["words", "Being told, plainly, in words 💬", "Plain words, said in daylight. He's practising."], ["acts", "Things quietly handled before I ask 🧺", "Quiet handling — the cab, the charger, the water bottle. On it."]] }, { id: "low", kind: "you", q: "On an off day, what helps most?", opts: [["listen", "Someone who just listens 🫂", "Listening, no fixing. Noted for every off day, trip or no trip."], ["food", "Food, delivered, no questions 🍜", "Food first, questions later. A very good policy."], ["space", "Space, then a call 📞", "Space first, then a call. He'll wait for the second part."], ["laugh", "Something to make me laugh 😄", "Then it's a good thing Saturday is a comedy show."]] }, { id: "reassure", kind: "you", q: "Say a phone dies for a few hours. When it's back, the first thing you'd want to hear?", opts: [["where", "Where he was, simply 📍", "A plain 'here's where I was'. Told him. Twice."], ["fine", "That everything's okay 🫶", "'All good, I'm here' — first line, every time."], ["sorry", "A sorry, then the story 🙂", "Sorry first, story second. Fair order."], ["none", "Nothing — I don't count hours ✨", "Generous. He'll still text, because updates are his job now."]] }, { id: "tell", kind: "you", q: "Your tell when you're tired but too polite to say?", opts: [["quiet", "I go quiet 🤫", "Quiet means tired. He'll read it and find a sofa."], ["yes", "I say yes to everything 🙃", "Then a too-easy yes gets a gentle 'sure?' from him. Once."], ["phone", "I vanish into my phone 📱", "Phone-scroll means wind-down. He won't take it personally."], ["short", "Short answers 😶", "Short answers mean 'home, please'. Understood."]] }, { id: "decide", kind: "you", q: "When someone asks 'what do you want to do?', you…", opts: [["know", "Know instantly 🎯", "Then he'll ask, and actually do the thing."], ["two", "Want two options, not ten 🔀", "Two options, no menus. That's how the plan is written."], ["you", "Say 'you pick' and mean it 😌", "He picks, you veto. That's the deal."], ["fake", "Say 'you pick' but do have a preference 😅", "Then 'you pick' gets a gentle second ask. Preferences welcome."]] }, { id: "perfect", kind: "you", text: true, q: "A perfect, ordinary Sunday — in one line?", react: "That's the kind of Sunday worth planning around. Filed, with care." }, { id: "feel", kind: "you", big: true, q: "Last one. If this trip gets to make you feel one thing, what should it be?", opts: [["home", "Like coming home 🏡", "Then that's the whole plan. Consider it my job too."], ["kid", "Like being twelve again ✨", "Twelve again. A bear could not ask for a better brief."], ["calm", "Calm, no rush 🍃", "Calm, no rush. The plan has gaps on purpose."], ["loved", "Looked-after 🧸", "Looked-after — the one thing he's been rehearsing for."]] }];
   const PART_LEN = k => QUIZ.filter(x => x.kind === k).length, PART_FIRST = k => QUIZ.findIndex(x => x.kind === k);
-  const INTRO = "Hi Divya — Teddy here 🧸 I'm your bear for this whole trip: the plan, the packing, what comes next — ask me anything, any time. First, eleven quick ones so the trip bends around you, then nine that are just about you. Skip any; tap Later up top to just talk. No marks for these — the real five were for the detailed layout, and you already have it. And yes, he'll read your answers. That's the point.";
+  const INTRO = "Hi Divya — Teddy here 🧸 I'm your bear for this whole trip: the plan, the packing, what comes next — ask me anything, any time. First, nine quick ones about the trip — how you'd like the days to feel — then nine that are just about you. Skip any; tap Later up top to just talk. No marks for these — the real five were for the detailed layout, and you already have it. And yes, he'll read your answers. That's the point.";
   const INTRO_GUEST = "Hi! Teddy here 🧸 This is the answer booklet Pranav wrote for Divya, and I'm the bear in it. Ask me about the plan.";
   const INTRO_FREE = "Hi Divya, Teddy here 🧸 Ask me anything about the trip.";
   const SKIP_LINE = "Skipped, no marks lost ✨";
@@ -2051,32 +1946,10 @@ html.msg-open .guide,html.msg-open .mbtn{display:none}
     if (typed || q.text) return typeof q.react === "string" ? q.react : "Noted, word for word 🧸";
     const o = (q.opts || []).find(o => o[0] === String(v)); return (o && o[2]) || (typeof q.react === "string" ? q.react : "Noted, with a nod 🧸");
   }
-  const closingFallback = () => "Twenty answers, and every one of them made the plan better 🧸 Friday you fly, Saturday we eat and laugh under a full moon, Sunday is the dharmic day, Monday is nothing on purpose — and I'll be here for all of it. Ask me anything.";
+  const closingFallback = () => "Eighteen answers, and every one of them made the plan better 🧸 Friday you fly, Saturday we eat and laugh under a full moon, Sunday is the dharmic day, Monday is nothing on purpose — and I'll be here for all of it. Ask me anything.";
   const genClosingFallback = () => "Seven new answers, and every one of them sounds exactly like you 🧸 The plan bends around you — that's what it's for. Ask me anything about the trip.";
   /* Offline questions are dealt without replacement; if a full fresh round is unavailable, keep chatting. */
-  const GEN_FALLBACK = [
-    { id: "g1", q: "If Teddy had a tiny job, what should it be?", opts: [["cloud", "Cloud watcher ☁️", "A very important desk with a sky view."], ["flower", "Flower keeper 🌼", "Every little bloom gets a good morning."], ["story", "Story collector 📖", "Tiny adventures, carefully tucked between the pages."], ["sock", "Lost-sock detective 🧦", "One bear. Two socks. A very big mystery."]], skip: "Skipped, with a little wave from Teddy 🧸" },
-    { id: "g2", q: "Choose a colour for an imaginary front door:", opts: [["yellow", "Sunshine yellow 🌻", "A little sunshine waiting at the doorstep."], ["blue", "Sky blue 🩵", "Clouds would feel very welcome here."], ["green", "Leaf green 🌿", "One leafy little hello coming right up."], ["pink", "Blush pink 🌸", "Even the door gets to blush a little."]], skip: "Skipped, with a little wave from Teddy 🧸" },
-    { id: "g3", q: "Which tiny skill would you learn just for fun?", opts: [["clay", "Making pottery 🏺", "Wonky little bowls deserve love too."], ["magic", "A magic trick 🪄", "I volunteer to look suitably amazed."], ["origami", "Folding paper cranes 🕊️", "A whole flock from one quiet afternoon."], ["garden", "Growing herbs 🌱", "Small leaves, big cheering from this bear."]], skip: "Skipped, with a little wave from Teddy 🧸" },
-    { id: "g4", q: "A surprise free hour appears. Where does it go?", opts: [["book", "Into a book 📚", "A bookmark and a little breathing room."], ["stretch", "A gentle stretch 🌿", "A lovely little pause for your shoulders."], ["doodle", "Onto a sketchpad ✏️", "The page is yours, squiggles included."], ["wander", "A little wander 🚶", "No destination needed for this tiny adventure."]], skip: "Skipped, with a little wave from Teddy 🧸" },
-    { id: "g5", q: "What makes a handwritten note feel special?", opts: [["doodle", "A silly doodle 🧸", "Crooked ears make an excellent bear portrait."], ["detail", "One small detail 💌", "Little details can carry a lot of warmth."], ["joke", "An inside joke 😄", "One secret giggle, folded neatly in half."], ["plain", "Simple honest words 🤍", "A few true words can be plenty."]], skip: "Skipped, with a little wave from Teddy 🧸" },
-    { id: "g6", q: "Choose a scent for a cosy little corner:", opts: [["earth", "Rain on earth 🌧️", "A little rainy-day magic, safely indoors."], ["citrus", "Fresh citrus 🍊", "A sunny little zing for this corner."], ["jasmine", "Jasmine flowers 🌼", "A soft floral hello by the window."], ["none", "No scent, please 🍃", "Fresh air gets the corner all to itself."]], skip: "Skipped, with a little wave from Teddy 🧸" },
-    { id: "g7", q: "Which animal gets a tiny crown today?", opts: [["cat", "A sleepy cat 🐈", "Royal nap time has officially begun."], ["dog", "A happy dog 🐕", "The kingdom runs entirely on happy tail wags."], ["otter", "A little otter 🦦", "A very splashy coronation is underway."], ["bear", "This teddy bear 🧸", "I shall wear it slightly crooked. Thank you."]], skip: "Skipped, with a little wave from Teddy 🧸" },
-    { id: "g8", q: "Pick a small thing to collect on imaginary adventures:", opts: [["leaf", "Interesting leaves 🍂", "Every leaf gets its own little story."], ["card", "Postcards 💌", "Little windows into places yet to explore."], ["stone", "Smooth pebbles 🪨", "Pocket-sized treasures with wonderfully smooth edges."], ["word", "Funny new words ✨", "A tiny dictionary with very big personality."]], skip: "Skipped, with a little wave from Teddy 🧸" },
-    { id: "g9", q: "Your umbrella gets a secret design. Choose one:", opts: [["stars", "Tiny stars ⭐", "A whole little sky above your head."], ["ducks", "Yellow ducks 🐥", "The rain has acquired a cheerful audience."], ["hearts", "Little hearts 💗", "A small roof with plenty of affection."], ["clear", "Just clear glass 🫧", "All the raindrops get a front-row seat."]], skip: "Skipped, with a little wave from Teddy 🧸" },
-    { id: "g10", q: "Which board-game role sounds most like you?", opts: [["builder", "Quiet strategist ♟️", "I see those excellent little plans brewing."], ["chaos", "Friendly chaos 🎲", "The dice have met their match today."], ["helper", "Rules explainer 📋", "Every game needs one patient little guide."], ["watch", "Cheerful spectator 🎉", "A very valuable seat on the cheering team."]], skip: "Skipped, with a little wave from Teddy 🧸" },
-    { id: "g11", q: "A blank notebook is waiting. What goes inside?", opts: [["ideas", "Little ideas 💡", "Tiny sparks deserve somewhere soft to land."], ["lists", "Satisfying lists ✅", "One little tick can feel very lovely."], ["quotes", "Favourite lines 📖", "A cosy home for words you love."], ["anything", "A bit of everything 🌈", "A notebook with room for every mood."]], skip: "Skipped, with a little wave from Teddy 🧸" },
-    { id: "g12", q: "Which small celebration would you invent?", opts: [["plant", "New leaf day 🌱", "A fresh leaf deserves a tiny parade."], ["tidy", "Clear desk day ✨", "Room for your elbows and a happy sigh."], ["sun", "Sunbeam day ☀️", "We honour the warm square on the floor."], ["kind", "Kind word day 💗", "A lovely little holiday for gentle words."]], skip: "Skipped, with a little wave from Teddy 🧸" },
-    { id: "g13", q: "Choose a silly name for a houseplant:", opts: [["bean", "Bean 🌱", "Small name, enormous leafy potential ahead."], ["sir", "Sir Leaves-a-lot 🍃", "A very distinguished member of the windowsill."], ["pickle", "Pickle 🥒", "The other plants are trying not to giggle."], ["own", "I have one ✨", "The naming ceremony is entirely yours."]], skip: "Skipped, with a little wave from Teddy 🧸" },
-    { id: "g14", q: "Which pocket-sized superpower would you like?", opts: [["find", "Find lost things 🔎", "Keys everywhere just breathed a tiny sigh."], ["bloom", "Make flowers bloom 🌷", "One little blossom wherever kindness is needed."], ["warm", "Warm cold hands 🧤", "A very cosy sort of everyday magic."], ["pause", "Pause a lovely moment ⏳", "A little extra room for the good bits."]], skip: "Skipped, with a little wave from Teddy 🧸" },
-    { id: "g15", q: "Choose the shape of a cloud drifting past:", opts: [["whale", "A floating whale 🐋", "The sky has its own gentle giant."], ["castle", "A little castle 🏰", "A very fluffy kingdom with excellent views."], ["rabbit", "A sleepy rabbit 🐇", "Those cloud ears are doing all the work."], ["blob", "An excellent blob ☁️", "A wonderfully unbothered shape. Strong choice."]], skip: "Skipped, with a little wave from Teddy 🧸" },
-    { id: "g16", q: "Which museum room would you wander into first?", opts: [["space", "Stars and space 🪐", "Plenty of room for a little wonder."], ["art", "Paintings and colour 🎨", "We can linger wherever your eyes pause."], ["history", "Old everyday objects 🗝️", "Little objects with very long stories inside."], ["nature", "The natural world 🦋", "So many tiny wonders to look at."]], skip: "Skipped, with a little wave from Teddy 🧸" },
-    { id: "g17", q: "Your imaginary bakery needs a name:", opts: [["crumb", "Little Crumb 🥐", "A small name with warm-window energy."], ["moon", "Moonbeam Bakes 🌙", "The sign practically glows all by itself."], ["bear", "The Flour Bear 🧸", "I may need a very small apron."], ["own", "Let me name it ✨", "The chalkboard is waiting for your idea."]], skip: "Skipped, with a little wave from Teddy 🧸" },
-    { id: "g18", q: "How would you decorate a tiny balcony?", opts: [["plants", "Leafy everywhere 🌿", "A little jungle with room to breathe."], ["lights", "Soft little lights ✨", "A gentle glow for the evening air."], ["chair", "One comfy chair 🪑", "One good seat can be a whole plan."], ["open", "Leave it open 🍃", "A lovely little space for the breeze."]], skip: "Skipped, with a little wave from Teddy 🧸" },
-    { id: "g19", q: "What kind of puzzle would you pick up?", opts: [["jigsaw", "A colourful jigsaw 🧩", "The corner pieces are politely lining up."], ["word", "A word puzzle ✏️", "A small adventure between the letters."], ["riddle", "A silly riddle 🤔", "One bear is already scratching his head."], ["none", "No puzzles today ☁️", "A perfectly lovely day to leave things simple."]], skip: "Skipped, with a little wave from Teddy 🧸" },
-    { id: "g20", q: "Choose a little ritual for the end of a day:", opts: [["window", "Open the window 🍃", "A little fresh air to close the chapter."], ["page", "Read one page 📖", "Just one page counts as a lovely ritual."], ["thanks", "Name a good thing 💗", "Even a tiny good thing earns its place."], ["none", "No fixed ritual 😌", "The evening can find its own gentle rhythm."]], skip: "Skipped, with a little wave from Teddy 🧸" },
-    { id: "g21", q: "Pick an imaginary adventure for a paper boat:", opts: [["pond", "A lily pond 🪷", "A very peaceful first port of call."], ["stream", "A winding stream 🍃", "A new little bend around every corner."], ["bath", "A bathtub ocean 🫧", "A grand voyage with excellent indoor weather."], ["shelf", "Stay on my shelf 🏡", "Some little boats are happy right at home."]], skip: "Skipped, with a little wave from Teddy 🧸" },
-  ];
+  const GEN_FALLBACK = [{ id: "g1", q: "If Teddy had a tiny job, what should it be?", opts: [["cloud", "Cloud watcher ☁️", "A very important desk with a sky view."], ["flower", "Flower keeper 🌼", "Every little bloom gets a good morning."], ["story", "Story collector 📖", "Tiny adventures, carefully tucked between the pages."], ["sock", "Lost-sock detective 🧦", "One bear. Two socks. A very big mystery."]], skip: "Skipped, with a little wave from Teddy 🧸" }, { id: "g2", q: "Choose a colour for an imaginary front door:", opts: [["yellow", "Sunshine yellow 🌻", "A little sunshine waiting at the doorstep."], ["blue", "Sky blue 🩵", "Clouds would feel very welcome here."], ["green", "Leaf green 🌿", "One leafy little hello coming right up."], ["pink", "Blush pink 🌸", "Even the door gets to blush a little."]], skip: "Skipped, with a little wave from Teddy 🧸" }, { id: "g3", q: "Which tiny skill would you learn just for fun?", opts: [["clay", "Making pottery 🏺", "Wonky little bowls deserve love too."], ["magic", "A magic trick 🪄", "I volunteer to look suitably amazed."], ["origami", "Folding paper cranes 🕊️", "A whole flock from one quiet afternoon."], ["garden", "Growing herbs 🌱", "Small leaves, big cheering from this bear."]], skip: "Skipped, with a little wave from Teddy 🧸" }, { id: "g4", q: "A surprise free hour appears. Where does it go?", opts: [["book", "Into a book 📚", "A bookmark and a little breathing room."], ["stretch", "A gentle stretch 🌿", "A lovely little pause for your shoulders."], ["doodle", "Onto a sketchpad ✏️", "The page is yours, squiggles included."], ["wander", "A little wander 🚶", "No destination needed for this tiny adventure."]], skip: "Skipped, with a little wave from Teddy 🧸" }, { id: "g5", q: "What makes a handwritten note feel special?", opts: [["doodle", "A silly doodle 🧸", "Crooked ears make an excellent bear portrait."], ["detail", "One small detail 💌", "Little details can carry a lot of warmth."], ["joke", "An inside joke 😄", "One secret giggle, folded neatly in half."], ["plain", "Simple honest words 🤍", "A few true words can be plenty."]], skip: "Skipped, with a little wave from Teddy 🧸" }, { id: "g6", q: "Choose a scent for a cosy little corner:", opts: [["earth", "Rain on earth 🌧️", "A little rainy-day magic, safely indoors."], ["citrus", "Fresh citrus 🍊", "A sunny little zing for this corner."], ["jasmine", "Jasmine flowers 🌼", "A soft floral hello by the window."], ["none", "No scent, please 🍃", "Fresh air gets the corner all to itself."]], skip: "Skipped, with a little wave from Teddy 🧸" }, { id: "g7", q: "Which animal gets a tiny crown today?", opts: [["cat", "A sleepy cat 🐈", "Royal nap time has officially begun."], ["dog", "A happy dog 🐕", "The kingdom runs entirely on happy tail wags."], ["otter", "A little otter 🦦", "A very splashy coronation is underway."], ["bear", "This teddy bear 🧸", "I shall wear it slightly crooked. Thank you."]], skip: "Skipped, with a little wave from Teddy 🧸" }, { id: "g8", q: "Pick a small thing to collect on imaginary adventures:", opts: [["leaf", "Interesting leaves 🍂", "Every leaf gets its own little story."], ["card", "Postcards 💌", "Little windows into places yet to explore."], ["stone", "Smooth pebbles 🪨", "Pocket-sized treasures with wonderfully smooth edges."], ["word", "Funny new words ✨", "A tiny dictionary with very big personality."]], skip: "Skipped, with a little wave from Teddy 🧸" }, { id: "g9", q: "Your umbrella gets a secret design. Choose one:", opts: [["stars", "Tiny stars ⭐", "A whole little sky above your head."], ["ducks", "Yellow ducks 🐥", "The rain has acquired a cheerful audience."], ["hearts", "Little hearts 💗", "A small roof with plenty of affection."], ["clear", "Just clear glass 🫧", "All the raindrops get a front-row seat."]], skip: "Skipped, with a little wave from Teddy 🧸" }, { id: "g10", q: "Which board-game role sounds most like you?", opts: [["builder", "Quiet strategist ♟️", "I see those excellent little plans brewing."], ["chaos", "Friendly chaos 🎲", "The dice have met their match today."], ["helper", "Rules explainer 📋", "Every game needs one patient little guide."], ["watch", "Cheerful spectator 🎉", "A very valuable seat on the cheering team."]], skip: "Skipped, with a little wave from Teddy 🧸" }, { id: "g11", q: "A blank notebook is waiting. What goes inside?", opts: [["ideas", "Little ideas 💡", "Tiny sparks deserve somewhere soft to land."], ["lists", "Satisfying lists ✅", "One little tick can feel very lovely."], ["quotes", "Favourite lines 📖", "A cosy home for words you love."], ["anything", "A bit of everything 🌈", "A notebook with room for every mood."]], skip: "Skipped, with a little wave from Teddy 🧸" }, { id: "g12", q: "Which small celebration would you invent?", opts: [["plant", "New leaf day 🌱", "A fresh leaf deserves a tiny parade."], ["tidy", "Clear desk day ✨", "Room for your elbows and a happy sigh."], ["sun", "Sunbeam day ☀️", "We honour the warm square on the floor."], ["kind", "Kind word day 💗", "A lovely little holiday for gentle words."]], skip: "Skipped, with a little wave from Teddy 🧸" }, { id: "g13", q: "Choose a silly name for a houseplant:", opts: [["bean", "Bean 🌱", "Small name, enormous leafy potential ahead."], ["sir", "Sir Leaves-a-lot 🍃", "A very distinguished member of the windowsill."], ["pickle", "Pickle 🥒", "The other plants are trying not to giggle."], ["own", "I have one ✨", "The naming ceremony is entirely yours."]], skip: "Skipped, with a little wave from Teddy 🧸" }, { id: "g14", q: "Which pocket-sized superpower would you like?", opts: [["find", "Find lost things 🔎", "Keys everywhere just breathed a tiny sigh."], ["bloom", "Make flowers bloom 🌷", "One little blossom wherever kindness is needed."], ["warm", "Warm cold hands 🧤", "A very cosy sort of everyday magic."], ["pause", "Pause a lovely moment ⏳", "A little extra room for the good bits."]], skip: "Skipped, with a little wave from Teddy 🧸" }, { id: "g15", q: "Choose the shape of a cloud drifting past:", opts: [["whale", "A floating whale 🐋", "The sky has its own gentle giant."], ["castle", "A little castle 🏰", "A very fluffy kingdom with excellent views."], ["rabbit", "A sleepy rabbit 🐇", "Those cloud ears are doing all the work."], ["blob", "An excellent blob ☁️", "A wonderfully unbothered shape. Strong choice."]], skip: "Skipped, with a little wave from Teddy 🧸" }, { id: "g16", q: "Which museum room would you wander into first?", opts: [["space", "Stars and space 🪐", "Plenty of room for a little wonder."], ["art", "Paintings and colour 🎨", "We can linger wherever your eyes pause."], ["history", "Old everyday objects 🗝️", "Little objects with very long stories inside."], ["nature", "The natural world 🦋", "So many tiny wonders to look at."]], skip: "Skipped, with a little wave from Teddy 🧸" }, { id: "g17", q: "Your imaginary bakery needs a name:", opts: [["crumb", "Little Crumb 🥐", "A small name with warm-window energy."], ["moon", "Moonbeam Bakes 🌙", "The sign practically glows all by itself."], ["bear", "The Flour Bear 🧸", "I may need a very small apron."], ["own", "Let me name it ✨", "The chalkboard is waiting for your idea."]], skip: "Skipped, with a little wave from Teddy 🧸" }, { id: "g18", q: "How would you decorate a tiny balcony?", opts: [["plants", "Leafy everywhere 🌿", "A little jungle with room to breathe."], ["lights", "Soft little lights ✨", "A gentle glow for the evening air."], ["chair", "One comfy chair 🪑", "One good seat can be a whole plan."], ["open", "Leave it open 🍃", "A lovely little space for the breeze."]], skip: "Skipped, with a little wave from Teddy 🧸" }, { id: "g19", q: "What kind of puzzle would you pick up?", opts: [["jigsaw", "A colourful jigsaw 🧩", "The corner pieces are politely lining up."], ["word", "A word puzzle ✏️", "A small adventure between the letters."], ["riddle", "A silly riddle 🤔", "One bear is already scratching his head."], ["none", "No puzzles today ☁️", "A perfectly lovely day to leave things simple."]], skip: "Skipped, with a little wave from Teddy 🧸" }, { id: "g20", q: "Choose a little ritual for the end of a day:", opts: [["window", "Open the window 🍃", "A little fresh air to close the chapter."], ["page", "Read one page 📖", "Just one page counts as a lovely ritual."], ["thanks", "Name a good thing 💗", "Even a tiny good thing earns its place."], ["none", "No fixed ritual 😌", "The evening can find its own gentle rhythm."]], skip: "Skipped, with a little wave from Teddy 🧸" }, { id: "g21", q: "Pick an imaginary adventure for a paper boat:", opts: [["pond", "A lily pond 🪷", "A very peaceful first port of call."], ["stream", "A winding stream 🍃", "A new little bend around every corner."], ["bath", "A bathtub ocean 🫧", "A grand voyage with excellent indoor weather."], ["shelf", "Stay on my shelf 🏡", "Some little boats are happy right at home."]], skip: "Skipped, with a little wave from Teddy 🧸" }];
   const SUGG = ["What's the plan for Saturday?", "Is he nervous too?", "What do I pack?", "Tell me about the moon thing 🌕"];
   const CANNED = [  // the local Teddy: offline, or under the CEO harness
     [/saturday|\bsat\b/i, "Saturday: lunch at Kopitiam Lah at 12:30 pm, the afternoon is your call, Pratyush Chaubey at 9 pm — and the moon turns full at 10:19 pm 🌕"],
@@ -2102,7 +1975,7 @@ html.msg-open .guide,html.msg-open .mbtn{display:none}
     }
     q.answers = q.answers && typeof q.answers === "object" ? q.answers : {};
     q.index = Number.isInteger(q.index) ? Math.max(0, Math.min(QUIZ.length, q.index)) : 0;
-    q.done = q.done && typeof q.done === "object" ? q.done : {}; q.done.onboarding = !!q.done.onboarding; q.done.trip = !!q.done.trip;  // onboarding = part 1 finished, trip = all twenty
+    q.done = q.done && typeof q.done === "object" ? q.done : {}; q.done.onboarding = !!q.done.onboarding; q.done.trip = !!q.done.trip;  // onboarding = part 1 finished, trip = all eighteen
     q.paused = !!q.paused;
     quiz = q;
   }
@@ -2130,6 +2003,10 @@ html.msg-open .guide,html.msg-open .mbtn{display:none}
     if (/\b(photos?|pictures?|selfies?|pics?)\b/.test(n) && /\b(trip|take|taking|click|clicking|shoot|lots|many|camera|posing)\b/.test(n) && !/\b(edit|filters?|albums?|frames?|prints?|captions?|wallpapers?|backgrounds?)\b/.test(n)) intents.push("photo-choice");
     if (/\b(land|landed|landing|arrive|arrives|arriving|arrival|touchdown)\b/.test(n) && /\b(first|hour|straight|bed|sleep|talk|chat|eat|feed)\b/.test(n) && !/\b(text|message|call|photos?|pictures?|songs?|playlist|snacks?|outfits?|wear|weather)\b/.test(n)) intents.push("first-hour-choice");
     if (/\b(recharge|recharges|recharging|unwind|unwinds|unwinding|decompress|wind down)\b/.test(n) && !/\b(playlist|songs?|snacks?|drinks?|tea|coffee|bath|books?|shows?|series|movies?)\b/.test(n)) intents.push("recharge-choice");
+    // v3 starter choices (25 Sep 2026): how much she wants to know in advance, when her energy turns up, how she takes a plan slipping
+    if (/\b(advance|ahead|beforehand|upfront|before)\b/.test(n) && /\b(know|knowing|plan|planned|plans|surprise|surprises|tell|told|see|itinerar\w*)\b/.test(n) && !/\b(flight|airport|land|landing|packing|pack|menu|food|dinner|lunch|breakfast|songs?|playlist|outfits?|clothes|weather|photos?|gifts?|presents?)\b/.test(n)) intents.push("advance-knowledge-choice");
+    if (((/\b(energy|energies|alert|awake|sharp\w*|fresh)\b/.test(n) && /\b(morning|mornings|afternoon|afternoons|evening|evenings|night|nights|late|early|when|time|hours?)\b/.test(n)) || (/\b(morning|mornings|early)\b/.test(n) && /\b(night|nights|late|owl)\b/.test(n))) && !/\b(coffee|chai|tea|breakfast|snacks?|food|songs?|playlist|workout|gym|shower|photos?|light|sunlight)\b/.test(n)) intents.push("energy-time-choice");
+    if (/\b(plans?|schedule|booking)\b/.test(n) && /\b(falls? through|fell through|cancell?ed|cancell?ing|last minute|last-minute|changes?|changed|goes? wrong|went wrong|ruined|spoiled)\b/.test(n) && !/\b(movie|dinner|menu|songs?|playlist|outfits?|photos?|cab|flight|train)\b/.test(n)) intents.push("plan-change-choice");
     return intents;
   }
   function repeatsQuestion(q, previous) {
@@ -2187,13 +2064,12 @@ html.msg-open .guide,html.msg-open .mbtn{display:none}
   }
   function recapHTML() {
     const a = quiz.answers, lab = (id, v) => { const q = QUIZ.find(x => x.id === id); if (!q || !q.opts) return String(v); return (Array.isArray(v) ? v : [v]).map(x => { const o = q.opts.find(o => o[0] === String(x)); return o ? o[1] : String(x); }).join(", "); };
-    const pick = id => choices[id] && !Array.isArray(choices[id]) ? optLabel(id, choices[id]) : "";
-    const rows = [["🎢", "Pace", a.pace && lab("pace", a.pace)], ["🌙", "First hour", a.landing && lab("landing", a.landing)], ["✈️", "Nerves", a.nervous && (Number.isInteger(a.nervous) ? a.nervous + " of 10" : a.nervous)],
-      ["🕹️", "Saturday afternoon", pick("sat-pm")], ["💃", "Saturday night", pick("sat-night")], ["🪔", "Sunday morning", pick("sun-iskcon")],
-      ["🍽️", "On the table", chosen("food").map(o => optLabel("food", o)).filter(Boolean).join(", ")], ["🚫", "Off every list", a.foodno],
-      ["🛋️", "Monday", pick("mon-pick")], ["📸", "Photos", a.photos && lab("photos", a.photos)], ["✨", "Not on the plan yet", a.wish]].filter(r => r[2]);
+    const rows = [["🎢", "Pace", a.pace && lab("pace", a.pace)], ["🧭", "In advance", a.openness && lab("openness", a.openness)],
+      ["☀️", "Best energy", a.energy && lab("energy", a.energy)], ["🌙", "First hour", a.landing && lab("landing", a.landing)],
+      ["✈️", "Nerves", a.nervous && (Number.isInteger(a.nervous) ? a.nervous + " of 10" : a.nervous)], ["🌦️", "If plans slip", a.surprise && lab("surprise", a.surprise)],
+      ["📸", "Photos", a.photos && lab("photos", a.photos)], ["🚫", "Off every list", a.foodno], ["✨", "One wish", a.wish]].filter(r => r[2]);
     const body = rows.length ? rows.map(r => `<div><span>${r[0]}</span><span><b>${esc(r[1])}</b> · ${esc(String(r[2]))}</span></div>`).join("") : "<div><span>✨</span><span>All open — you kept every option. That works too.</span></div>";
-    return `<div class="recap">${body}<small>Saturday, Sunday, Monday and the kitchen can be changed on the trip tab any time. The rest, just tell me.</small></div><button type="button" class="chip qlink">Open the trip 🧳</button>`;
+    return `<div class="recap">${body}<small>Nothing here is fixed — the trip tab is where the plan lives, and it can change any time.</small></div><button type="button" class="chip qlink">Open the trip 🧳</button>`;
   }
   function divider(kind) { const t = `Part ${CHAPTERS[kind].n} · ${CHAPTERS[kind].title}`; keep("td", t, "div"); tdLog.appendChild(row("t", t, "div")); scrollLog(); }
   function recap() { keep("td", RECAP_T, "recap"); const el = row("t", RECAP_T, "recap"); tdLog.appendChild(el); ux.pop(el, "t"); scrollLog(); return el; }
@@ -2398,7 +2274,7 @@ html.msg-open .guide,html.msg-open .mbtn{display:none}
     await wait(700);
     if (quiz.index >= QUIZ.length) {
       quiz.done.onboarding = true; quiz.done.trip = true; saveQuiz(); log("quiz_done", "trip");
-      await say("That's all twenty — give me a second to read them properly 🧸");
+      await say("That's all eighteen — give me a second to read them properly 🧸");
       const all = QUIZ.map(qq => ({ qid: qq.id, question: qq.q, answer: Array.isArray(quiz.answers[qq.id]) ? quiz.answers[qq.id].join(", ") : String(quiz.answers[qq.id] || "") }));
       const closing = await reply({ mode: "closing", quiz: { answers: all } }, closingFallback(), false);
       ux.celebrate(2); log("quiz_closing", String(closing).length);
@@ -2478,6 +2354,46 @@ html.msg-open .guide,html.msg-open .mbtn{display:none}
   }
   let toastT = null;
   function toast(t) { const el = $("#toast"); $("#toastText").textContent = t; el.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { el.hidden = true; }, 3200); }
+  /* ── The card Pranav sent (26 Sep 2026) ────────────────────────────────────────────────
+     A 6s creative, shown once, on her first sign-in. Deliberately gated on `who` and NOT on
+     ME: ME is also true under automation, and gating on it would hide the card from every
+     gate run — so nothing would verify what she actually sees. The "once ever" flag lives in
+     the booklet store, so sandbox testing spends its own `sbx:` key and never hers.
+     There is no copy on it. The six lines are his; anything we added would be ours, not his. */
+  function skyCardOpen() {
+    const el = $("#skyCard"); if (!el || !el.hidden) return;
+    el.hidden = false; document.documentElement.classList.add("sc-open");
+    const v = $("#scVid");
+    if (v) {
+      const calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!calm) { try { v.muted = true; const p = v.play(); if (p && p.catch) p.catch(() => {}); } catch (e) {} }  // the poster holds if it cannot play
+    }
+    const x = el.querySelector(".sc-x"); if (x) x.focus({ preventScroll: true });
+    log("skycard", "open");
+  }
+  function skyCardClose() {
+    const el = $("#skyCard"); if (!el || el.hidden) return;
+    el.hidden = true; document.documentElement.classList.remove("sc-open");
+    const v = $("#scVid"); if (v) { try { v.pause(); } catch (e) {} }
+    store.set("booklet-skycard", 1);
+  }
+  function skyCardMaybe(w) {
+    if (w !== "divya") return;                       // hers only — never the shared test login
+    if (AUTOMATED) return;                           // harness deterministic; the card gate un-fakes webdriver to verify it
+    if (store.get("booklet-skycard", 0)) return;     // once ever, on this device
+    setTimeout(skyCardOpen, 700);                    // let the greeting land first
+  }
+  document.addEventListener("click", e => { if (e.target.closest("[data-scclose]")) { e.preventDefault(); skyCardClose(); } });
+  /* Capture phase: the card is the topmost layer, so it takes Escape before the install
+     sheet, the letter and the drawer handlers under it ever see the key. */
+  document.addEventListener("keydown", e => {
+    const el = $("#skyCard"); if (!el || el.hidden) return;
+    if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); skyCardClose(); return; }
+    if (e.key === "Tab") { const f = [...el.querySelectorAll("button, a[href], video")].filter(x => x.offsetParent !== null); if (!f.length) return;
+      e.stopPropagation();
+      if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+      else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); } }
+  }, true);
   const teddyLocked = () => { if (!LOCKED()) return false; toast("Teddy is still being stitched together 🧸 Back soon."); log("tap", "teddy_locked"); return true; };
   /* Who gets in where:
      · Teddy — locked only for Divya, open to the owner and to the shared test login.
@@ -2715,6 +2631,7 @@ html.msg-open .guide,html.msg-open .mbtn{display:none}
     if (w === "guest" && !AUTOMATED) selectTab("teddy", { reason: "first", focus: "auto" });  // a test login walks the whole flow: Teddy says hi and asks a few — under the harness the trip stays
     renderGuide();
     if (!maybeInstall()) setTimeout(autoGuide, 6000);  // her install ask first; the guide takes the next turn after it
+    skyCardMaybe(w);  // and his card sits above both (z 130): she sees the gift, then the install ask behind it
   }
   /* The bell: her device subscribes for Teddy's knocks (Pranav's own test devices too). The
      subscription is written by the chat server (Firestore rules stay untouched). One tap off = gone. */
@@ -2767,6 +2684,7 @@ html.msg-open .guide,html.msg-open .mbtn{display:none}
   else if (!AUTOMATED && !ME && who === "guest" && !quiz.done.onboarding && !quiz.paused) selectTab("teddy", { reason: prevVisit ? "resume" : "first", focus: "auto" });  // a test login back with the quiz unfinished → Teddy; everyone else → the trip
   log("open", returning ? "return" : prevVisit ? "resume" : "first", returning && SECTION_NAME[resumeTo] ? resumeTo : "");
   if (who) { if (!maybeInstall()) setTimeout(autoGuide, 6000); }  // she is remembered, so "next login" is really "next visit" — the ask rides that
+  if (who) skyCardMaybe(who);  // remembered as Divya and never shown his card yet → show it on this visit too
   setInterval(tick, 1000);
   setInterval(refreshAll, 30000);
   document.addEventListener("visibilitychange", () => { if (!document.hidden) refreshAll(); });
